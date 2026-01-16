@@ -5,10 +5,29 @@ import java.util.List;
 import xyz.sathwik.lox.Expr.Binary;
 import xyz.sathwik.lox.Expr.Grouping;
 import xyz.sathwik.lox.Expr.Unary;
+import xyz.sathwik.lox.Expr.Variable;
 import xyz.sathwik.lox.Stmt.Expression;
 import xyz.sathwik.lox.Stmt.Print;
+import xyz.sathwik.lox.Stmt.Var;
 
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
+
+    private Environment environment = new Environment();
+
+    @Override
+    public Void visitVarStmt(Var stmt) {
+        Object value = null;
+        if (stmt.initializer != null)
+            value = evaluate(stmt.initializer);
+
+        environment.define(stmt.name.lexeme, value);
+        return null;
+    }
+
+    @Override
+    public Object visitVariableExpr(Variable expr) {
+        return environment.get(expr.name);
+    }
 
     @Override
     public Void visitExpressionStmt(Expression stmt) {
