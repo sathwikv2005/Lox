@@ -1,12 +1,28 @@
 package xyz.sathwik.lox;
 
-import javax.management.RuntimeErrorException;
+import java.util.List;
 
 import xyz.sathwik.lox.Expr.Binary;
 import xyz.sathwik.lox.Expr.Grouping;
 import xyz.sathwik.lox.Expr.Unary;
+import xyz.sathwik.lox.Stmt.Expression;
+import xyz.sathwik.lox.Stmt.Print;
 
-public class Interpreter implements Expr.Visitor<Object> {
+public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
+
+    @Override
+    public Void visitExpressionStmt(Expression stmt) {
+        evaluate(stmt.expression);
+        return null;
+    }
+
+    @Override
+    public Void visitPrintStmt(Print stmt) {
+        Object value = evaluate(stmt.expression);
+        System.out.println(stringify(value));
+        return null;
+    }
+
     @Override
     public Object visitLiteralExpr(Expr.Literal expr) {
         return expr.value;
@@ -116,15 +132,6 @@ public class Interpreter implements Expr.Visitor<Object> {
         throw new RuntimeError(operator, "Operands must be numbers.");
     }
 
-    void interpret(Expr expression) {
-        try {
-            Object value = evaluate(expression);
-            System.out.println(stringify(value));
-        } catch (RuntimeError error) {
-            Lox.runtimeError(error);
-        }
-    }
-
     private String stringify(Object object) {
         if (object == null)
             return "nil";
@@ -137,6 +144,20 @@ public class Interpreter implements Expr.Visitor<Object> {
         }
 
         return object.toString();
+    }
+
+    private void execute(Stmt stmt) {
+        stmt.accept(this);
+    }
+
+    void interpret(List<Stmt> statements) {
+        try {
+            for (Stmt stmt : statements) {
+                execute(stmt);
+            }
+        } catch (RuntimeError error) {
+            Lox.runtimeError(error);
+        }
     }
 
 }
