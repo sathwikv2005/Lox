@@ -3,6 +3,7 @@ package xyz.sathwik.lox;
 import static xyz.sathwik.lox.Expr.*;
 
 import xyz.sathwik.lox.Expr.Assign;
+import xyz.sathwik.lox.Expr.Logical;
 import xyz.sathwik.lox.Expr.Variable;
 
 public class AstPrinter implements Expr.Visitor<String> {
@@ -52,6 +53,11 @@ public class AstPrinter implements Expr.Visitor<String> {
     @Override
     public String visitAssignExpr(Assign expr) {
         return expr.name.lexeme + " = " + (expr.value.toString());
+    }
+
+    @Override
+    public String visitLogicalExpr(Logical expr) {
+        return parenthesize(expr.operator.lexeme, expr.left, expr.right);
     }
 
 }

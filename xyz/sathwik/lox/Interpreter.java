@@ -2,20 +2,25 @@ package xyz.sathwik.lox;
 
 import java.util.List;
 
-import xyz.sathwik.lox.Expr.Assign;
-import xyz.sathwik.lox.Expr.Binary;
-import xyz.sathwik.lox.Expr.Grouping;
-import xyz.sathwik.lox.Expr.Unary;
-import xyz.sathwik.lox.Expr.Variable;
-import xyz.sathwik.lox.Stmt.Block;
-import xyz.sathwik.lox.Stmt.Expression;
-import xyz.sathwik.lox.Stmt.If;
-import xyz.sathwik.lox.Stmt.Print;
-import xyz.sathwik.lox.Stmt.Var;
+import xyz.sathwik.lox.Expr.*;
+import xyz.sathwik.lox.Stmt.*;
 
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     private Environment environment = new Environment();
+
+    @Override
+    public Object visitLogicalExpr(Logical expr) {
+        Object left = evaluate(expr.left);
+        if (expr.operator.type == TokenType.OR) {
+            if (isTruthy(left))
+                return left;
+        } else {
+            if (!isTruthy(left))
+                return left;
+        }
+        return evaluate(expr.right);
+    }
 
     @Override
     public Void visitIfStmt(If stmt) {
