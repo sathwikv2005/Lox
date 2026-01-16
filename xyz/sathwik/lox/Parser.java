@@ -58,7 +58,7 @@ public class Parser {
     }
 
     private Expr assignment() {
-        Expr expr = or();
+        Expr expr = ternary();
 
         if (match(EQUAL)) {
             Token equals = previous();
@@ -71,6 +71,19 @@ public class Parser {
             error(equals, "Invalid assignment target.");
         }
 
+        return expr;
+    }
+
+    private Expr ternary() {
+        Expr expr = or();
+
+        if (match(QUESTION)) {
+            Expr thenBranch = expression();
+            consume(COLON, "Expect ':' after expression.");
+            Expr elseBranch = ternary();
+
+            return new Expr.Ternary(expr, thenBranch, elseBranch);
+        }
         return expr;
     }
 

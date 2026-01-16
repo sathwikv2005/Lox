@@ -10,6 +10,16 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     private Environment environment = new Environment();
 
     @Override
+    public Object visitTernaryExpr(Ternary expr) {
+        Object condition = evaluate(expr.condition);
+
+        if (isTruthy(condition))
+            return evaluate(expr.thenBranch);
+        else
+            return evaluate(expr.elseBranch);
+    }
+
+    @Override
     public Void visitWhileStmt(While stmt) {
         while (isTruthy(evaluate(stmt.condition))) {
             execute(stmt.body);

@@ -16,6 +16,8 @@ abstract class Expr {
 
         R visitUnaryExpr(Unary expr);
 
+        R visitTernaryExpr(Ternary expr);
+
         R visitVariableExpr(Variable expr);
     }
 
@@ -112,6 +114,24 @@ abstract class Expr {
 
         final Token operator;
         final Expr right;
+
+    }
+
+    static class Ternary extends Expr {
+        Ternary(Expr condition, Expr thenBranch, Expr elseBranch) {
+            this.condition = condition;
+            this.thenBranch = thenBranch;
+            this.elseBranch = elseBranch;
+        }
+
+        @Override
+        <R> R accept(Visitor<R> visitor) {
+            return visitor.visitTernaryExpr(this);
+        }
+
+        final Expr condition;
+        final Expr thenBranch;
+        final Expr elseBranch;
 
     }
 
