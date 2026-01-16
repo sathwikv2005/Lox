@@ -2,6 +2,8 @@ package xyz.sathwik.lox;
 
 import static xyz.sathwik.lox.Expr.*;
 
+import xyz.sathwik.lox.Expr.Variable;
+
 public class AstPrinter implements Expr.Visitor<String> {
     String print(Expr expr) {
         return expr.accept(this);
@@ -39,6 +41,11 @@ public class AstPrinter implements Expr.Visitor<String> {
         }
         builder.append(") ");
         return builder.toString();
+    }
+
+    @Override
+    public String visitVariableExpr(Variable expr) {
+        return expr.name.lexeme;
     }
 
 }
