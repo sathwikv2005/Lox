@@ -9,12 +9,22 @@ import xyz.sathwik.lox.Expr.Unary;
 import xyz.sathwik.lox.Expr.Variable;
 import xyz.sathwik.lox.Stmt.Block;
 import xyz.sathwik.lox.Stmt.Expression;
+import xyz.sathwik.lox.Stmt.If;
 import xyz.sathwik.lox.Stmt.Print;
 import xyz.sathwik.lox.Stmt.Var;
 
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     private Environment environment = new Environment();
+
+    @Override
+    public Void visitIfStmt(If stmt) {
+        if (isTruthy(evaluate(stmt.condition)))
+            execute(stmt.thenBranch);
+        else if (stmt.elseBranch != null)
+            execute(stmt.elseBranch);
+        return null;
+    }
 
     @Override
     public Void visitBlockStmt(Block stmt) {
