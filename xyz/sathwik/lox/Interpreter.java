@@ -2,10 +2,12 @@ package xyz.sathwik.lox;
 
 import java.util.List;
 
+import xyz.sathwik.lox.Expr.Assign;
 import xyz.sathwik.lox.Expr.Binary;
 import xyz.sathwik.lox.Expr.Grouping;
 import xyz.sathwik.lox.Expr.Unary;
 import xyz.sathwik.lox.Expr.Variable;
+import xyz.sathwik.lox.Stmt.Block;
 import xyz.sathwik.lox.Stmt.Expression;
 import xyz.sathwik.lox.Stmt.Print;
 import xyz.sathwik.lox.Stmt.Var;
@@ -13,6 +15,19 @@ import xyz.sathwik.lox.Stmt.Var;
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     private Environment environment = new Environment();
+
+    @Override
+    public Void visitBlockStmt(Block stmt) {
+        executeBlock(stmt.statements, new Environment(this.environment));
+        return null;
+    }
+
+    @Override
+    public Object visitAssignExpr(Assign expr) {
+        Object value = evaluate(expr.value);
+        environment.assign(expr.name, value);
+        return value;
+    }
 
     @Override
     public Void visitVarStmt(Var stmt) {
@@ -121,6 +136,19 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     private Object evaluate(Expr expr) {
         return expr.accept(this);
+    }
+
+    void executeBlock(List<Stmt> statements, Environment environment) {
+        Environment prev = this.environment;
+        try {
+            this.environment = environment;
+
+            for (Stmt statement : statements) {
+                execute(statement);
+            }
+        } finally {
+            this.environment = prev;
+        }
     }
 
     private boolean isTruthy(Object obj) {

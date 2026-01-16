@@ -53,7 +53,24 @@ public class Parser {
     }
 
     private Expr expression() {
-        return equality();
+        return assignment();
+    }
+
+    private Expr assignment() {
+        Expr expr = equality();
+
+        if (match(EQUAL)) {
+            Token equals = previous();
+            Expr value = assignment();
+
+            if (expr instanceof Expr.Variable) {
+                Token name = ((Expr.Variable) expr).name;
+                return new Expr.Assign(name, value);
+            }
+            error(equals, "Invalid assignment target.");
+        }
+
+        return expr;
     }
 
     private Expr equality() {
@@ -189,6 +206,8 @@ public class Parser {
     private Stmt statement() {
         if (match(PRINT))
             return printStatement();
+        if (match(LEFT_BRACE))
+            return new Stmt.Block(block());
         return expressionStatement();
     }
 
@@ -202,6 +221,18 @@ public class Parser {
         Expr expr = expression();
         consume(SEMICOLON, "Expect ';' after value.");
         return new Stmt.Expression(expr);
+    }
+
+    private List<Stmt> block() {
+        List<Stmt> statemtnts = new ArrayList<>();
+
+        while (!check(RIGHT_BRACE) && !isAtEnd()) {
+            statemtnts.add(declaration());
+        }
+
+        consume(RIGHT_BRACE, "Expect '}' after block.");
+        return statemtnts;
+
     }
 
     List<Stmt> parse() {
