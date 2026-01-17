@@ -16,8 +16,10 @@ if( a > 10 ) a = 3;
 
 print ">a = " + a;
 
-var i = 0;
-while( i < a ){
-    print i;
-    i = i + 1;
+print clock();
+
+fun display(n){
+    print n;
 }
+
+display("test");

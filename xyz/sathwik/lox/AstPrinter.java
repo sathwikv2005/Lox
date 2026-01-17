@@ -3,6 +3,7 @@ package xyz.sathwik.lox;
 import static xyz.sathwik.lox.Expr.*;
 
 import xyz.sathwik.lox.Expr.Assign;
+import xyz.sathwik.lox.Expr.Call;
 import xyz.sathwik.lox.Expr.Logical;
 import xyz.sathwik.lox.Expr.Ternary;
 import xyz.sathwik.lox.Expr.Variable;
@@ -64,6 +65,11 @@ public class AstPrinter implements Expr.Visitor<String> {
     @Override
     public String visitTernaryExpr(Ternary expr) {
         return parenthesize(expr.condition + "?", expr.thenBranch, expr.elseBranch);
+    }
+
+    @Override
+    public String visitCallExpr(Call expr) {
+        return expr.toString() + " " + expr.arguments.toString();
     }
 
 }
