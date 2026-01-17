@@ -297,6 +297,8 @@ public class Parser {
             return ifStatement();
         if (match(PRINT))
             return printStatement();
+        if (match(RETURN))
+            return returnStatement();
         if (match(WHILE))
             return whileStatement();
         if (match(LEFT_BRACE))
@@ -369,6 +371,16 @@ public class Parser {
         Stmt body = statement();
 
         return new Stmt.While(condition, body);
+    }
+
+    private Stmt returnStatement() {
+        Token keyword = previous();
+        Expr value = null;
+        if (!check(SEMICOLON)) {
+            value = expression();
+        }
+        consume(SEMICOLON, "Expect ';' after return.");
+        return new Stmt.Return(keyword, value);
     }
 
     private Stmt expressionStatement() {
