@@ -4,7 +4,9 @@ import static xyz.sathwik.lox.Expr.*;
 
 import xyz.sathwik.lox.Expr.Assign;
 import xyz.sathwik.lox.Expr.Call;
+import xyz.sathwik.lox.Expr.Get;
 import xyz.sathwik.lox.Expr.Logical;
+import xyz.sathwik.lox.Expr.Set;
 import xyz.sathwik.lox.Expr.Ternary;
 import xyz.sathwik.lox.Expr.Variable;
 
@@ -70,6 +72,16 @@ public class AstPrinter implements Expr.Visitor<String> {
     @Override
     public String visitCallExpr(Call expr) {
         return expr.toString() + " " + expr.arguments.toString();
+    }
+
+    @Override
+    public String visitGetExpr(Get expr) {
+        return expr.toString();
+    }
+
+    @Override
+    public String visitSetExpr(Set expr) {
+        return expr.toString();
     }
 
 }

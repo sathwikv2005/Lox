@@ -7,6 +7,7 @@ import java.util.Stack;
 
 import xyz.sathwik.lox.Expr.*;
 import xyz.sathwik.lox.Stmt.Block;
+import xyz.sathwik.lox.Stmt.Class;
 import xyz.sathwik.lox.Stmt.Expression;
 import xyz.sathwik.lox.Stmt.Function;
 import xyz.sathwik.lox.Stmt.If;
@@ -225,6 +226,26 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
         resolve(expr.condition);
         resolve(expr.thenBranch);
         resolve(expr.elseBranch);
+        return null;
+    }
+
+    @Override
+    public Void visitClassStmt(Class stmt) {
+        declare(stmt.name);
+        define(stmt.name);
+        return null;
+    }
+
+    @Override
+    public Void visitGetExpr(Get expr) {
+        resolve(expr.object);
+        return null;
+    }
+
+    @Override
+    public Void visitSetExpr(Set expr) {
+        resolve(expr.value);
+        resolve(expr.object);
         return null;
     }
 
