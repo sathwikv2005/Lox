@@ -19,13 +19,13 @@ This repository contains my **from-scratch implementation of the Lox programming
 
 ```bash
 javac *.java
-java Lox
+java -cp . xyz.sathwik.lox.Lox
 ```
 
 Run a Lox file:
 
 ```bash
-java Lox path/to/file.lox
+java -cp . xyz.sathwik.lox.Lox <path>
 ```
 
 ---
@@ -55,15 +55,3 @@ print c.value; // 1
 - _Crafting Interpreters_ — Robert Nystrom
 
 ---
-
-## 🔮 What’s Next
-
-- Add this project to my **portfolio & resume**
-- Build **Helium**, a custom programming language and bytecode VM in C
-- Implement a **Game Boy emulator** to deepen low-level systems knowledge
-
----
-
-## 📜 License
-
-This project is for educational purposes. All language design credit for Lox goes to Robert Nystrom.
