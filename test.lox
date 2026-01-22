@@ -29,9 +29,12 @@ for (var i = 0; i <= 3; i = i + 1) {
 
 
 class Test{
+    Test(){
+        print "Initializer ran";
+    }
     display(){
-        print "testing..";
+        return this;
     }
 }
-
-print Test;
+var t = Test();
+print t.display();

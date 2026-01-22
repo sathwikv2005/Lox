@@ -8,6 +8,7 @@ import xyz.sathwik.lox.Expr.Get;
 import xyz.sathwik.lox.Expr.Logical;
 import xyz.sathwik.lox.Expr.Set;
 import xyz.sathwik.lox.Expr.Ternary;
+import xyz.sathwik.lox.Expr.This;
 import xyz.sathwik.lox.Expr.Variable;
 
 public class AstPrinter implements Expr.Visitor<String> {
@@ -82,6 +83,11 @@ public class AstPrinter implements Expr.Visitor<String> {
     @Override
     public String visitSetExpr(Set expr) {
         return expr.toString();
+    }
+
+    @Override
+    public String visitThisExpr(This expr) {
+        return expr.keyword.lexeme;
     }
 
 }
