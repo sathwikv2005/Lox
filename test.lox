@@ -35,17 +35,28 @@ class Test{
     display(){
         return this;
     }
+    main(){
+        return "Main";
+    }
+    function(){
+        return "Function";
+    }
 }
 
-class Dummy{
-    display(){
-        return this;
+class Dummy < Test{
+    function(){
+        return "Dummy function";
+    }
+    getMain(){
+        return super.main();
     }
 }
 
 var t = Test();
+var d = Dummy();
 t.prop = "Test property";
 print t.prop;
-t.function = Dummy().display;
-print t.function();
 print t.display();
+print d.display();
+print d.function();
+print d.getMain();
