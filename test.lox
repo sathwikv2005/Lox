@@ -36,7 +36,16 @@ class Test{
         return this;
     }
 }
+
+class Dummy{
+    display(){
+        return this;
+    }
+}
+
 var t = Test();
 t.prop = "Test property";
 print t.prop;
+t.function = Dummy().display;
+print t.function();
 print t.display();
