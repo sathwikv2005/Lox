@@ -37,4 +37,6 @@ class Test{
     }
 }
 var t = Test();
+t.prop = "Test property";
+print t.prop;
 print t.display();
